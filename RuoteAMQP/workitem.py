@@ -1,6 +1,10 @@
 import simplejson as json
 from copy import deepcopy
 
+from collections import namedtuple
+
+fei_field_names = ['expid', 'wfid', 'sub_wfid', 'engine_id']
+
 class FlowExpressionId(object):
     """
     The FlowExpressionId (fei for short) is an process expression identifier.
@@ -23,24 +27,22 @@ class FlowExpressionId(object):
 
     def __init__(self, h):
         self._h = deepcopy(h)
-
+        self._fields = namedtuple("FeiFields", fei_field_names)(**h)
+               
     def __getitem__(self, key):
         return self._h[key]
 
     def expid(self):
-        return self._h['expid']
+        return self._fields.expid
 
     def wfid(self):
-        return self._h['wfid']
+        return self._fields.wfid
 
     def sub_wfid(self):
-        return self._h['sub_wfid']
+        return self._fields.sub_wfid
 
     def engine_id(self):
-        return self._h['engine_id']
-
-    def expid(self):
-        return self._h['expid']
+        return self._fields.engine_id
 
     def to_storage_id(self):
         return "%s!%s!%s" % (self._h['expid'], self._h['sub_wfid'], self._h['wfid'])
@@ -51,7 +53,7 @@ class FlowExpressionId(object):
         '0_5_7', the child_id will be '7'.
         """
         try:
-            return int(self._h.expid.split(CHILD_SEP)[-1])
+            return int(self._h['expid'].split(self.CHILD_SEP)[-1])
         except ValueError:
             return None       
 
@@ -93,7 +95,7 @@ class Workitem(object):
         Returns the "workflow instance id" (unique process instance id) of
         the process instance which issued this workitem.
         """
-        return self._fei.wfid
+        return self._fei.wfid()
 
     def fei(self):
         "Returns a Ruote::FlowExpressionId instance."
@@ -121,6 +123,8 @@ class Workitem(object):
         Sets all the fields in one sweep.
         Remember : the fields must be a JSONifiable hash.
         """
+        if not isinstance(fields, dict):
+            raise TypeError("fields must be a dictionary")
         self._h['fields'] = fields
 
     def result(self):
@@ -146,7 +150,7 @@ class Workitem(object):
 
     def __eq__ (self, other):
         "Warning : equality is based on fei and not on payload !"
-        if isinstance(other, type(self)): return false
+        if isinstance(other, type(self)): return False
         return self._h['fei'] == other.h['fei']
 
     def __ne__ (self, other):
@@ -155,7 +159,7 @@ class Workitem(object):
 
     def hash(self):
         "Warning : hash is fei's hash."
-        return hash(self._h['fei'])
+        return hash(self._fei)
 
 
     def lookup(self, key, container_lookup=False):

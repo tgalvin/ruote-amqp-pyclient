@@ -1,0 +1,78 @@
+RuoteAMQP Participant  
+=====================
+
+Purpose
+=======
+
+We have a Python codebase that needs to become part of a Ruote based system.
+
+We need a better understanding of what is required.
+
+These changes here add a modicum of unittesting in order to enhance understanding.
+
+This is my best guess, more docstrings and more explicit variable naming would have helped.
+
+Please excuse any misunderstandings.
+
+Comments
+========
+
+FlowExpressionId
+----------------
+
+1. namedtuple
+
+I have used the namedtuple which is part of the standard library.
+
+This will perform key checks, explicit class instantiation would be more pythonic 
+in my view (but changes the API)
+
+Another way would be:
+
+class Foo(object):
+    def __init__(self, my_dict):
+        self.__dict__.update(my_dict)
+
+2. child_id
+
+Not sure that this has been used. A couple of changes made for purposes of unittests.
+
+Although it does look like there is some format expected for `engine_id`. Is this documented anywhere?
+
+3. expid 
+
+This appeads twice. I guess it is a typo
+
+4. direct_child 
+
+`join` is not a Python type
+
+Workitem
+--------
+
+1. wfid 
+
+The brackets are missing here. Provides a good example why properties are considered safer
+
+http://docs.python.org/library/functions.html.
+
+2. set_fields
+
+Added an exception here inline with the docstring
+
+3. __eq__
+
+false is not a Python type. It looks like this isn't in use and I am not sure what was intended
+
+4. __ne__
+
+Leaving this due to problems with 4.
+
+5. hash
+
+A dictionary is not hashable. Is it the FlowExpressionId that needs hashing?
+
+6. lookup / set_field
+
+`lookup` provides a good illustration as to one advantage of Classes over Dictionarys for this kind of work. 
+
