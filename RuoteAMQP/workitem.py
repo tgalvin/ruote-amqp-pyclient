@@ -1,10 +1,6 @@
 import simplejson as json
 from copy import deepcopy
 
-from collections import namedtuple
-
-fei_field_names = ['expid', 'wfid', 'sub_wfid', 'engine_id']
-
 class FlowExpressionId(object):
     """
     The FlowExpressionId (fei for short) is an process expression identifier.
@@ -27,22 +23,24 @@ class FlowExpressionId(object):
 
     def __init__(self, h):
         self._h = deepcopy(h)
-        self._fields = namedtuple("FeiFields", fei_field_names)(**h)
-               
+
     def __getitem__(self, key):
         return self._h[key]
 
     def expid(self):
-        return self._fields.expid
+        return self._h['expid']
 
     def wfid(self):
-        return self._fields.wfid
+        return self._h['wfid']
 
     def sub_wfid(self):
-        return self._fields.sub_wfid
+        return self._h['sub_wfid']
 
     def engine_id(self):
-        return self._fields.engine_id
+        return self._h['engine_id']
+
+    def expid(self):
+        return self._h['expid']
 
     def to_storage_id(self):
         return "%s!%s!%s" % (self._h['expid'], self._h['sub_wfid'], self._h['wfid'])
