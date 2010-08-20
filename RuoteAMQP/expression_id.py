@@ -7,6 +7,11 @@ class ExpressionId(object):
     CHILD_SEP = "_"
 
     def __init__(self, *args):
+        """
+        @type args: *{int}
+        @param args: Integers representing the Expression Id
+        """
+
         self.args = args
 
     def __iter__(self):
