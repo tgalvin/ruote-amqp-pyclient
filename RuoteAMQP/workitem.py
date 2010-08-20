@@ -2,47 +2,6 @@ import simplejson as json
 from copy import deepcopy
 
 
-ENGINE = 'engine'
-
-class _FlowExpressionId(object):
-
-    def __init__(self, wfid, sub_wfid, expid, engine_id = ENGINE): 
-        """
-        @type wfid: string
-        @param wfid: workflow instance id, 
-                     the identifier for the process instance
-
-        @type sub_wfid: string
-        @param sub_wfid: the identifier for the 
-                      sub process within the main instance
-
-        @type expid: string
-        @param expid: the expression id, where in the process tree
-
-        @type engine_id: string
-        @param engine_id:  only relevant in multi engine scenarii 
-        """
-        self.wfid = wfid
-        self.sub_wfid = sub_wfid 
-        self.expid = expid 
-        self.engine_id = engine_id
-
-
-    @property 
-    def storage_id(self):
-        return "%s!%s!%s" % (self.expid, 
-                             self.sub_wfid, 
-                             self.wfid)
-
-    @property
-    def child_id(self):
-        """
-        Returns the last number in the expid. For instance, if the expid is
-        '0_5_7', the child_id will be '7'.
-        """
-        return self.expid.split(self.CHILD_SEP)[-1])
-      
-
 class FlowExpressionId(object):
     """
     The FlowExpressionId (fei for short) is an process expression identifier.
