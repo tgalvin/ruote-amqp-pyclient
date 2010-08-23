@@ -20,6 +20,14 @@
 # 02110-1301 USA
 # ***** END LICENCE BLOCK *****
 
+#This is a WIP to clarify the interfaces 
+#And drive discussion
+
+#Based on original work:
+# 
+#http://github.com/jmettraux/ruote/tree/ruote2.1/lib/ruote
+#http://github.com/lbt/ruote-amqp-pyclient/tree/master/RuoteAMQP/
+
 from expression_id import ExpressionId
 
 class FeiException(Exception):

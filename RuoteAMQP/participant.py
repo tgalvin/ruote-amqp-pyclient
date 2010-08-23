@@ -24,6 +24,14 @@ from amqplib import client_0_8 as amqp
 from workitem import Workitem
 import simplejson as json
 
+#This is a WIP to clarify the interfaces 
+#And drive discussion
+
+#Based on original work:
+# 
+#http://github.com/jmettraux/ruote/tree/ruote2.1/lib/ruote
+#http://github.com/lbt/ruote-amqp-pyclient/tree/master/RuoteAMQP/
+
 class Participant:
     """
     A Participant will do work in a Ruote process. Participant is
