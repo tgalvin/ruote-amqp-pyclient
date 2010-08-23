@@ -32,7 +32,7 @@ import simplejson as json
 #http://github.com/jmettraux/ruote/tree/ruote2.1/lib/ruote
 #http://github.com/lbt/ruote-amqp-pyclient/tree/master/RuoteAMQP/
 
-class Participant:
+class Participant(object):
     """
     A Participant will do work in a Ruote process. Participant is
     essentially abstract and must be subclassed to provide a useful
@@ -96,9 +96,8 @@ class Participant:
         Currently an infinite loop waiting for messages 
         on the AMQP channel.
         """
-        self._amqp_consume()
         while True:
-             self._chan.wait()
+            self._chan.wait()
 
     def finish(self):
         "Closes channel and connection"
@@ -112,7 +111,7 @@ class Participant:
         ruote engine.  The consume() method should set the
         workitem.result() if required.
         """
-        msg = amqp.Message(json.dumps(self.workitem.to_h()))
+        msg = amqp.Message(json.dumps(self.workitem.to_dict()))
         # delivery_mode=2 is persistent
         msg.properties["delivery_mode"] = 2 
 

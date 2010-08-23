@@ -34,6 +34,25 @@ import simplejson as json
 from flow_expression_id import FlowExpressionId
 from fields import Fields
 
+####################################
+# KEYS 
+###################################
+
+FEI = 'fei'
+FIELDS = 'fields'
+PARTICIPANT_NAME = 'participant_name'
+
+WFID = 'wfid'
+SUB_WFID = 'sub_wfid'
+EXPID = 'expid'
+ENGINE_ID = 'engine_id'
+
+RESULT = '__result__'
+TIMED_OUT = '__timed_out__'
+ERROR = '__error__'
+DISPATCHED_AT = 'dispatched_at'
+PARAMS = 'params'
+FORGET = 'forget'
 
 ########################################
 # Factories
@@ -49,10 +68,10 @@ def fei_factory(fei_dict):
     @rtype result: C{FlowExpressionId}
     @rparam result: The FlowExpressionId
     """
-    fei = FlowExpressionId(fei_dict['wfid'],
-                           fei_dict['sub_wfid'],
-                           fei_dict['expid'],
-                           fei_dict.get('engine_id', None))
+    fei = FlowExpressionId(fei_dict[WFID],
+                           fei_dict[SUB_WFID],
+                           fei_dict[EXPID],
+                           fei_dict.get(ENGINE_ID, None))
     return fei
 
 
@@ -64,13 +83,15 @@ def fields_factory(fields_dict):
     @rtype result: C{Fields}
     @rparam result: The Fields
     """
-    result = fields_dict['__result__']
-    timed_out = fields_dict['__timed_out__']
-    error = fields_dict['__error__']
-    dispatched_at = fields_dict['dispatched_at']
-    forget = fields_dict['params']['forget']
+    result = fields_dict[RESULT]
+    timed_out = fields_dict[TIMED_OUT]
+    error = fields_dict[ERROR]
+    dispatched_at = fields_dict[DISPATCHED_AT]
+    forget = fields_dict[PARAMS][FORGET]
     fields = Fields(result, timed_out, error, dispatched_at, forget)
     return fields
+
+
 
 ######################################
 # Workitem
@@ -89,9 +110,9 @@ class Workitem(object):
         """
         message_dict = json.loads(message)
         self._message_dict = message_dict 
-        self.fei = fei_factory(message_dict['fei'])
-        self.fields = fields_factory(message_dict['fields'])
-        self.participant_name = message_dict['participant_name']
+        self.fei = fei_factory(message_dict[FEI])
+        self.fields = fields_factory(message_dict[FIELDS])
+        self.participant_name = message_dict[PARTICIPANT_NAME]
 
     #################################
     # DELEGATES 
@@ -163,3 +184,24 @@ class Workitem(object):
         @param parameters: The Ruote Parameters
         """
         return self.fields.parameters
+
+    @property 
+    def to_dict(self):
+        """
+        @type parameters: C{dict]
+        @param parameters: A dictionary representation of the data structure
+        """
+        params_dict = {FORGET : self.parameters.forget}
+        fields_dict = {RESULT : self.result,
+                       TIMED_OUT : self.timed_out,
+                       ERROR : self.error,
+                       DISPATCHED_AT : self.dispatch_at,
+                       PARAMS : params_dict} 
+        fei_dict = {WFID : self.fei.wfid,
+                    SUB_WFID : self.fei.sub_wfid,
+                    EXPID : self.fei.expid,
+                    ENGINE_ID : self.fei.engine_id}
+        return {FEI : fei_dict,
+                FIELDS : fields_dict,
+                PARTICIPANT_NAME : self.participant_name}
+       

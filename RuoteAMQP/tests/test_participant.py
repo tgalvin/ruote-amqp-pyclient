@@ -78,7 +78,7 @@ class TestParticipant(unittest.TestCase):
                     '',
                     'ruote_workitems')
         def test_cb(message):
-            self.assertEquals("bar", json.loads(message.body))
+            self.assertEquals({"foo" : "bar"}, json.loads(message.body))
         self.channel.basic_consume(queue = "bar", 
                                    callback = test_cb)
        
@@ -87,8 +87,8 @@ class TestParticipant(unittest.TestCase):
         participant = Participant("bar", "localhost", 
                                   "guest", "guest", "/")
         class WorkitemStub:
-             def to_h(self):
-                 return "bar" 
+             def to_dict(self):
+                 return {"foo" : "bar"} 
         participant.workitem = WorkitemStub()
         participant.reply_to_engine()        
         self.channel.wait()

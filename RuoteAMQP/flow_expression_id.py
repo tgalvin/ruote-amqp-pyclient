@@ -28,8 +28,6 @@
 #http://github.com/jmettraux/ruote/tree/ruote2.1/lib/ruote
 #http://github.com/lbt/ruote-amqp-pyclient/tree/master/RuoteAMQP/
 
-from expression_id import ExpressionId
-
 class FeiException(Exception):
     pass
 

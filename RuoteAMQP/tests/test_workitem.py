@@ -66,11 +66,11 @@ class TestWorkitem(unittest.TestCase):
                             '__error__': 'err',
                             'dispatched_at': 'bar',
                             'params': self.params_dict}
-        self.foo_dict = {'fei': fei_dict, 
+        self.all_dict = {'fei': fei_dict, 
                          'participant_name': "foo",
                          'fields': self.fields_dict}
         
-        self.msg = json.dumps(self.foo_dict)
+        self.msg = json.dumps(self.all_dict)
         self.workitem = Workitem(self.msg)
 
     def test_sid(self):
@@ -106,6 +106,9 @@ class TestWorkitem(unittest.TestCase):
 
     def test_parameters(self):
         self.assertTrue(isinstance(self.workitem.parameters, Parameters))
+
+    def test_to_dict(self):
+        self.assertEquals(self.all_dict, self.workitem.to_dict)
 
 if __name__ == "__main__":
     unittest.main()
