@@ -1,26 +1,45 @@
+# ***** BEGIN LICENCE BLOCK *****
+# This file is part of OTS
+#
+# Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+#
+# Contact: Mikko Makinen <mikko.al.makinen@nokia.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public License
+# version 2.1 as published by the Free Software Foundation.
+#
+# This library is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+# 02110-1301 USA
+# ***** END LICENCE BLOCK *****
+
 import simplejson as json
 
-class Parameters(object):
-    
-    forget = None
-
-class Fields(object):
-
-    __result__ = False
-    __timed_out__ = False
-    __error__ = None
-
-    def __init__(self, result, timed_out, error, dispatched_at, forget):
-        self.__result__ = result
-        self.__timed_out__ = timed_out
-        self.__error__ = error
-        self.dispatched_at = dispatched_at
-        self.parameters = Parameters()
-        self.parameters.forget = forget
-
 from flow_expression_id import FlowExpressionId
+from fields import Fields
+
+
+########################################
+# Factories
+#######################################
+
+# Convert dictionaries to Classes
 
 def fei_factory(fei_dict):
+    """
+    @type result: C{dict}
+    @param result: A dictionary containing the fei attributes  
+
+    @rtype result: C{FlowExpressionId}
+    @rparam result: The FlowExpressionId
+    """
     fei = FlowExpressionId(fei_dict['wfid'],
                            fei_dict['sub_wfid'],
                            fei_dict['expid'],
@@ -29,6 +48,13 @@ def fei_factory(fei_dict):
 
 
 def fields_factory(fields_dict):
+    """
+    @type result: C{dict}
+    @param result: A dictionary containing the field attributes  
+
+    @rtype result: C{Fields}
+    @rparam result: The Fields
+    """
     result = fields_dict['__result__']
     timed_out = fields_dict['__timed_out__']
     error = fields_dict['__error__']
@@ -37,10 +63,21 @@ def fields_factory(fields_dict):
     fields = Fields(result, timed_out, error, dispatched_at, forget)
     return fields
 
+######################################
+# Workitem
+######################################
 
 class Workitem(object):
+    """
+    A workitem can be thought of an "execution token", 
+    but with a payload (fields).
+    """
 
     def __init__(self, message):
+        """
+        @type message: C{json}
+        @param message: A jsonified dict  
+        """
         message_dict = json.loads(message)
         self._message_dict = message_dict 
         self.fei = fei_factory(message_dict['fei'])
@@ -48,7 +85,7 @@ class Workitem(object):
         self.participant_name = message_dict['participant_name']
 
     #################################
-    # Delegates 
+    # DELEGATES 
     #################################
 
     # FIXME do we really want to retain these?
@@ -116,5 +153,4 @@ class Workitem(object):
         @type parameters: L{Parameters]
         @param parameters: The Ruote Parameters
         """
-        
         return self.fields.parameters
