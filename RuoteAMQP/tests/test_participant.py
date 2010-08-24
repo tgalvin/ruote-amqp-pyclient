@@ -29,7 +29,6 @@ import json
 from participant import Participant
 
 def _init_queue(channel, queue, exchange, routing_key):
-    print type(channel)
     channel.queue_declare(queue = queue, 
                           durable = False, 
                           exclusive = False,
@@ -88,8 +87,9 @@ class TestParticipant(unittest.TestCase):
         participant = Participant("bar", "localhost", 
                                   "guest", "guest", "/")
         class WorkitemStub:
-             def to_dict(self):
-                 return {"foo" : "bar"} 
+            @property
+            def to_dict(self):
+                return {"foo" : "bar"} 
         participant.workitem = WorkitemStub()
         participant.reply_to_engine()        
         self.channel.wait()

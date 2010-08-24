@@ -32,6 +32,8 @@ import simplejson as json
 #http://github.com/jmettraux/ruote/tree/ruote2.1/lib/ruote
 #http://github.com/lbt/ruote-amqp-pyclient/tree/master/RuoteAMQP/
 
+from message_io import send, receive
+
 class Participant(object):
     """
     A Participant will do work in a Ruote process. Participant is
@@ -78,8 +80,7 @@ class Participant(object):
 
     def workitem_callback(self, msg):
         "This is where a workitem message is handled"
-
-        self.workitem = Workitem(msg.body)
+        self.workitem = receive(msg)
         self.consume()
         if not self.workitem.forget:
             self.reply_to_engine()
@@ -111,15 +112,5 @@ class Participant(object):
         ruote engine.  The consume() method should set the
         workitem.result() if required.
         """
-        msg = amqp.Message(json.dumps(self.workitem.to_dict()))
-        # delivery_mode=2 is persistent
-        msg.properties["delivery_mode"] = 2 
-
-        # Publish the message.
-        # Notice that this is sent to the anonymous/'' exchange (which is
-        # different to 'amq.direct') with a routing_key for the queue
-        self._chan.basic_publish(msg, 
-                                 exchange='', 
-                                 routing_key='ruote_workitems')
+        send(self._chan, self.workitem)
         
-
