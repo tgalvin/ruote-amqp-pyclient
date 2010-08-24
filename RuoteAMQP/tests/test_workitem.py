@@ -31,12 +31,12 @@ from workitem import Workitem, FlowExpressionId, fei_factory, fields_factory
 class TestWorkitem(unittest.TestCase):
 
     def test_fei_factory(self):
-        fei_dict = {'expid': 'expid_value',
+        fei_dict = {'expid': '1_2_3',
                     'wfid': 'wfid_value',
                     'sub_wfid': 'sub_wfid_value',
                     'engine_id': 'engine_id_value'}
         fei = fei_factory(fei_dict)
-        self.assertEquals('expid_value', fei.expid)
+        self.assertEquals('1_2_3', fei.expid)
         self.assertEquals('wfid_value', fei.wfid)
         self.assertEquals('sub_wfid_value', fei.sub_wfid)
         self.assertEquals('engine_id_value', fei.engine_id)
@@ -56,7 +56,7 @@ class TestWorkitem(unittest.TestCase):
         self.assertEquals("baz", fields.parameters.forget)
         
     def setUp(self):
-        fei_dict = {'expid': 'expid_value',
+        fei_dict = {'expid': '1_2_3',
                     'wfid': 'wfid_value',
                     'sub_wfid': 'sub_wfid_value',
                     'engine_id': 'engine_id_value'}
@@ -74,7 +74,7 @@ class TestWorkitem(unittest.TestCase):
         self.workitem = Workitem(self.msg)
 
     def test_sid(self):
-        self.assertEquals("expid_value!sub_wfid_value!wfid_value",
+        self.assertEquals("1_2_3!sub_wfid_value!wfid_value",
                           self.workitem.sid)
 
     def test_wfid(self):

@@ -28,7 +28,7 @@ from flow_expression_id import FlowExpressionId, FeiException
 class TestFlowExpressionId(unittest.TestCase):
 
     def setUp(self):
-        expression_id = ExpressionId(1, 2, 3)
+        expression_id = "1_2_3"
         self.fei = FlowExpressionId("foo", 
                                     "bar", 
                                     expression_id, 
@@ -47,7 +47,7 @@ class TestFlowExpressionId(unittest.TestCase):
         self.assertEquals(3, self.fei.child_id)
 
     def test_is_direct_child(self):
-        expression_id = ExpressionId(1, 2, 3)
+        expression_id = "1_2_3"
         fei_2 = FlowExpressionId("not_foo", 
                                     "bar", 
                                     expression_id, 
@@ -55,7 +55,7 @@ class TestFlowExpressionId(unittest.TestCase):
         self.assertFalse(self.fei.is_direct_child(fei_2))
 
 
-        expression_id = ExpressionId(1, 2)
+        expression_id = "1_2"
         fei_3 = FlowExpressionId("foo", 
                                  "bar", 
                                  expression_id, 

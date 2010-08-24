@@ -31,6 +31,8 @@
 class FeiException(Exception):
     pass
 
+from expression_id import expression_id_factory
+
 class FlowExpressionId(object):
     """
     The FlowExpressionId (fei for short) is an process expression identifier.
@@ -44,15 +46,15 @@ class FlowExpressionId(object):
 
     def __init__(self, wfid, sub_wfid, expid, engine_id = None): 
         """
-        @type wfid: string
+        @type wfid: C{string}
         @param wfid: workflow instance id, 
                      the identifier for the process instance
 
-        @type sub_wfid: string
+        @type sub_wfid: C{string}
         @param sub_wfid: the identifier for the 
                       sub process within the main instance
 
-        @type expid: L{ExpressionId}
+        @type expid: C{string} of form '^\d{0,2}%s\d{0,2}%s\d{0,2}$'
         @param expid: the expression id, where in the process tree
 
         @type engine_id: string
@@ -60,7 +62,7 @@ class FlowExpressionId(object):
         """
         self._wfid = wfid
         self._sub_wfid = sub_wfid 
-        self._expid = expid 
+        self._expid = expression_id_factory(expid)  
         self._engine_id = engine_id
 
     @property

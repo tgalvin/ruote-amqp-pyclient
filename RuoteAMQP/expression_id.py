@@ -28,35 +28,45 @@
 #http://github.com/jmettraux/ruote/tree/ruote2.1/lib/ruote
 #http://github.com/lbt/ruote-amqp-pyclient/tree/master/RuoteAMQP/
 
+CHILD_SEP = "_"
+
+def expression_id_factory(expid):
+    """
+    @type expid: C{string} of form '^\d{0,2}%s\d{0,2}%s\d{0,2}$'
+    @param expid: The expression id as a string
+    
+    @rtype expid: L{ExpressionId}
+    @rtype expid: The ExpressionId object
+    """
+    expid_list = [int(arg) for arg in expid.split(CHILD_SEP)]
+    return ExpressionId(expid_list)
+
 class ExpressionId(object):
     """
     The ExpressionId
     FIXME more documentation
     """
-
-    CHILD_SEP = "_"
-
-    def __init__(self, *args):
+    def __init__(self, expid_list):
         """
-        @type args: *{int}
+        @type args: C{list} of C{int}
         @param args: Integers representing the Expression Id
         """
 
-        self.args = args
+        self._expid_list = expid_list
 
     def __iter__(self):
         """
         @ytype: C{int}
         @yield: The arguments that make up the ExpressionId 
         """
-        for arg in self.args: yield int(arg)
+        for arg in self._expid_list: yield int(arg)
 
     def __str__(self):
         """
         @rtype: C{string}
         @return:form '^\d{0,2}%s\d{0,2}%s\d{0,2}$'
         """
-        return self.CHILD_SEP.join([str(arg) for arg in self])
+        return CHILD_SEP.join([str(arg) for arg in self])
 
     @property 
     def child_id(self):
@@ -64,7 +74,8 @@ class ExpressionId(object):
         @rtype: C{int}
         @return: The child id
         """
-        return int(self.args[-1]) 
+        #TODO: The logic here needs verifying
+        return int(self._expid_list[-1]) 
 
     @property 
     def parent_id(self):
@@ -72,11 +83,12 @@ class ExpressionId(object):
         @rtype: L{ExpressionId}
         @return: The ExpressionId of the parent
         """
-        return ExpressionId(*self.args[:-1])
+        #TODO: The logic here needs verifying
+        return ExpressionId(self._expid_list[:-1])
 
     def __eq__(self, expression_id):
         """
         @rtype: C{bool}
         @return: Are the ExpressionIds equal
         """
-        return (self.args == expression_id.args)
+        return (self._expid_list == expression_id._expid_list)

@@ -30,7 +30,7 @@ from workitem import Workitem
 class TestMessageIO(unittest.TestCase):
 
     def setUp(self):
-        fei_dict = {'expid': 'expid_value',
+        fei_dict = {'expid': '1_2_3',
                     'wfid': 'wfid_value',
                     'sub_wfid': 'sub_wfid_value',
                     'engine_id': 'engine_id_value'}
