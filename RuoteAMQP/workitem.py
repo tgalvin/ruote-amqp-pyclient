@@ -123,32 +123,32 @@ class Workitem(object):
     @property
     def sid(self):
         """
-        @type sid: C{string}
-        @param sid: The storage id
+        @rtype sid: C{string}
+        @rparam sid: The storage id
         """
         return self.fei.storage_id
 
     @property 
     def wfid(self):
         """
-        @type wfid: C{string}
-        @param wfid: The workflow id
+        @rtype wfid: C{string}
+        @rparam wfid: The workflow id
         """
         return self.fei.wfid
 
     @property 
     def result(self):
         """
-        @type result: C{bool}
-        @param result: The result
+        @rtype result: C{bool}
+        @rparam result: The result
         """
         return self.fields.__result__
 
     @property 
     def dispatch_at(self):
         """
-        @type dispatch_at: C{string}
-        @param dispatch_at: The dispatch location
+        @rtype dispatch_at: C{string}
+        @rparam dispatch_at: The dispatch location
         """
         
         return self.fields.dispatched_at
@@ -156,40 +156,40 @@ class Workitem(object):
     @property 
     def forget(self):
         """
-        @type forget: C{string}
-        @param forget: FIXME
+        @rtype forget: C{string}
+        @rparam forget: FIXME
         """
         return self.fields.parameters.forget
 
     @property 
     def timed_out(self):
         """
-        @type timed_out: C{bool}
-        @param timed_out: Has it timed out
+        @rtype timed_out: C{bool}
+        @rparam timed_out: Has it timed out
         """
         return self.fields.__timed_out__
 
     @property 
     def error(self):
         """
-        @type error: C{string}
-        @param error: The workflow id
+        @rtype error: C{string}
+        @rparam error: The workflow id
         """
         return self.fields.__error__
 
     @property 
     def parameters(self):
         """
-        @type parameters: L{Parameters]
-        @param parameters: The Ruote Parameters
+        @rtype parameters: L{Parameters]
+        @rparam parameters: The Ruote Parameters
         """
         return self.fields.parameters
 
     @property 
     def to_dict(self):
         """
-        @type parameters: C{dict]
-        @param parameters: A dictionary representation of the data structure
+        @rtype parameters: C{dict]
+        @rparam parameters: A dictionary representation of the data structure
         """
         params_dict = {FORGET : self.parameters.forget}
         fields_dict = {RESULT : self.result,
